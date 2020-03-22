@@ -16,6 +16,7 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
+
     /**
      * Show the application dashboard.
      *
@@ -23,6 +24,33 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $users = User::all();
+
+        return vie('users', compact('users'));
     }
+
+
+    public function user($id)
+    {
+        $user = User::find($id);
+
+        return view('user', compact('user'));
+    }
+
+
+    public function ajax(Request $request)
+    {
+        $user = User::find($request->user_id);
+
+        $response = auth()->user()->toggleFollow($user);
+
+        return response()->json([
+            'success' => $response
+        ]);
+
+
+    }
+
+
+
 }
